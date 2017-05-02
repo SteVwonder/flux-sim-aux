@@ -89,8 +89,6 @@ def print_flux_info():
     print "Flux broker CPU affinity: {}".format(p.cpu_affinity())
 
 def get_lwj_dir(fh, job_id):
-    return "lwj.0.0.{}".format(job_id)
-
     payload_str = json.dumps({'ids': [job_id]})
     response = fh.rpc_send('job.kvspath', payload=payload_str)
     paths = response['paths']
@@ -121,22 +119,21 @@ def get_jsc_cb(outstream):
             print "Job completed: {}".format(jobid)
             running_jobs.remove(jobid)
             completed_jobs.append(jobid)
-            # #jobdir_key = 'lwj.{}'.format(jobid)
-            # jobdir_key = get_lwj_dir(fh, jobid)
-            # complete_key = '{}.complete_time'.format(jobdir_key)
-            # print "Looking for kvs entry {}, since job {} completed".format(complete_key, jobid)
-            # while not kvs.exists(fh, complete_key):
-            #     print "{} kvs entry not found, waiting for it to be created".format(complete_key)
-            #     time.sleep(1)
-            # job_kvs = kvs.get_dir(fh, jobdir_key)
-            # rowdict = {}
-            # for key in fieldnames:
-            #     try:
-            #         rowdict[key] = job_kvs[key]
-            #     except KeyError:
-            #         pass
-            # rowdict['id'] = jobid
-            # writer.writerow(rowdict)
+            jobdir_key = get_lwj_dir(fh, jobid)
+            complete_key = '{}.complete_time'.format(jobdir_key)
+            print "Looking for kvs entry {}, since job {} completed".format(complete_key, jobid)
+            while not kvs.exists(fh, complete_key):
+                print "{} kvs entry not found, waiting for it to be created".format(complete_key)
+                time.sleep(1)
+            job_kvs = kvs.get_dir(fh, jobdir_key)
+            rowdict = {}
+            for key in fieldnames:
+                try:
+                    rowdict[key] = job_kvs[key]
+                except KeyError:
+                    pass
+            rowdict['id'] = jobid
+            writer.writerow(rowdict)
         if len(completed_jobs) > 0 and len(running_jobs) == 0 and len(pending_jobs) == 0:
             print "All children are dead, exiting"
             fh.reactor_stop(fh.get_reactor())
