@@ -20,14 +20,13 @@ Running the Simulation
 * Execute the `run_simulator.sh` script
   * By default, this script launches a simulation with:
     * a FCFS scheduler in each instance
-    * a cluster with 2 nodes
-    * a job workload with 4 top-level jobs
-      * 1 of those top-level jobs is a hierarchical job that contains 2 jobs
+    * a model of the `hype` cluster at LLNL
+    * a job workload with 12 jobs
   * You can change these settings by passing `--job`, `--rdl`, and `--plugin` to the run script
-    * The argument to `--job` should correspond to a directory in `hfiles`
-      * e.g. `./run_simulator.sh --job 8n8c.2`
+    * The argument to `--job` should correspond to a directory in `job_traces`
+      * e.g. `./run_simulator.sh --job cab`
     * The script will attempt to infer what RDL to use based on the name of the job workload you pass in
-      * e.g. if `20n8c` is in the name of the job workload it will use the `cluster20n8c.lua` configuration
+      * e.g. if `cab` is in the name of the job workload it will use the `cab.lua` configuration
     * Usually, I only pass `--plugin` to change the scheduler plugin and `--job` to change the job workload
 * You can view the output from the Flux brokers and the `inital_program` in `./logs`
 * You can view the simulation results (job starttimes, completetimes, etc) in `./results`
