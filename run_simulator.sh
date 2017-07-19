@@ -6,17 +6,17 @@ export FLUX_SCHED_RC_NOOP=1
 # already. These assume that flux-core, flux-sched, and this aux repo
 # are all sibling directories
 #
-export FLUX_MODULE_PATH=$(realpath ../flux-sched/sched/.libs):$(realpath ../flux-sched/simulator/.libs)${FLUX_MODULE_PATH:+":$FLUX_MODULE_PATH"}
-export LUA_PATH="$(realpath ../flux-sched/rdl)/?.lua"
-export LUA_CPATH="$(realpath ../flux-sched/rdl)/?.so"
+export FLUX_MODULE_PATH=$(readlink -f ../flux-sched/sched/.libs):$(readlink -f ../flux-sched/simulator/.libs)${FLUX_MODULE_PATH:+":$FLUX_MODULE_PATH"}
+export LUA_PATH="$(readlink -f ../flux-sched/rdl)/?.lua"
+export LUA_CPATH="$(readlink -f ../flux-sched/rdl)/?.so"
 #export LD_LIBRARY_PATH=../flux-core/src/common/.libs:../flux-core/src/modules/kvs/.libs/:../flux-sched/simulator/:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=../flux-sched/simulator/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$(readlink -f ../flux-sched/simulator/):$LD_LIBRARY_PATH
 FLUX_CMD="../flux-core/src/cmd/flux"
 # CLUSTER_CONF_DIR="../flux-sched/conf"
 
 # Uncomment and set this if you are using a local (i.e., non-default/system) python installation
-export PYTHONHOME="/usr/workspace/wsb/herbein1/local/toss2/miniconda2"
-export LD_LIBRARY_PATH="/usr/workspace/wsb/herbein1/local/toss2/miniconda2/lib:$LD_LIBRARY_PATH"
+#export PYTHONHOME="/usr/workspace/wsb/herbein1/local/toss2/miniconda2"
+#export LD_LIBRARY_PATH="/usr/workspace/wsb/herbein1/local/toss2/miniconda2/lib:$LD_LIBRARY_PATH"
 
 CLUSTER_CONF_DIR="./conf"
 JOB_NAME="hype"
@@ -57,7 +57,7 @@ do
             shift # past argument
             ;;
         --redirect)
-            SCRIPT_PATH=$(realpath "$2")
+            SCRIPT_PATH=$(readlink -f "$2")
             USE_SCRIPT_REDIRECT=true
             EXTRA_FLAGS="--redirect_script ${SCRIPT_PATH}"${EXTRA_FLAGS:+" $EXTRA_FLAGS"}
             shift # past argument
