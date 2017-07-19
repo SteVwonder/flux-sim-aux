@@ -3,7 +3,7 @@ Setup
 
 * Clone these specific versions off GitHub:
   * [flux-core:v0.7.0](https://github.com/flux-framework/flux-core/releases/tag/v0.7.0)
-  * [flux-sched:682734f658be59ca2a128fdb58aac82096ecae56](https://github.com/flux-framework/flux-sched/commit/682734f658be59ca2a128fdb58aac82096ecae56)
+  * [flux-sched:c18643503b749bb66ba84944be62adf64147c147](https://github.com/flux-framework/flux-sched/commit/c18643503b749bb66ba84944be62adf64147c147)
 * Clone the [scheduling auxillary repo](https://lc.llnl.gov/bitbucket/projects/FLUX/repos/sim-aux) (i.e., this repo) from LLNL's BitBucket
   * NOTE: all 3 of these repositories should exist in the same directory, e.g.:
     * flux-framework
