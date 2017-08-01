@@ -6,22 +6,16 @@ export FLUX_SCHED_RC_NOOP=1
 # already. These assume that flux-core, flux-sched, and this aux repo
 # are all sibling directories
 #
-export FLUX_MODULE_PATH=$(readlink -f ../flux-sched/sched/.libs):$(readlink -f ../flux-sched/simulator/.libs)${FLUX_MODULE_PATH:+":$FLUX_MODULE_PATH"}
-export LUA_PATH="$(readlink -f ../flux-sched/rdl)/?.lua"
-export LUA_CPATH="$(readlink -f ../flux-sched/rdl)/?.so"
-#export LD_LIBRARY_PATH=../flux-core/src/common/.libs:../flux-core/src/modules/kvs/.libs/:../flux-sched/simulator/:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$(readlink -f ../flux-sched/simulator/):$LD_LIBRARY_PATH
-FLUX_CMD="../flux-core/src/cmd/flux"
-# CLUSTER_CONF_DIR="../flux-sched/conf"
+export FLUX_MODULE_PATH=$(readlink -f ../flux-sched/simulator/.libs)${FLUX_MODULE_PATH:+":$FLUX_MODULE_PATH"}
+#export LUA_PATH="$(readlink -f ../flux-sched/rdl)/?.lua"
+#export LUA_CPATH="$(readlink -f ../flux-sched/rdl)/?.so"
+#export LD_LIBRARY_PATH=$(readlink -f ../flux-sched/simulator/):$LD_LIBRARY_PATH
 
-# Uncomment and set this if you are using a local (i.e., non-default/system) python installation
-#export PYTHONHOME="/usr/workspace/wsb/herbein1/local/toss2/miniconda2"
-#export LD_LIBRARY_PATH="/usr/workspace/wsb/herbein1/local/toss2/miniconda2/lib:$LD_LIBRARY_PATH"
-
+#FLUX_CMD="../flux-core/src/cmd/flux"
+FLUX_CMD=flux
 CLUSTER_CONF_DIR="./conf"
 JOB_NAME="hype"
 EXTRA_FLAGS=""
-#FLUX_CMD="flux"
 SCHED_PLUGIN="sched.fcfs"
 
 # Use -gt 1 to consume two arguments per pass in the loop (e.g. each
@@ -131,5 +125,4 @@ ${FLUX_CMD} start \
             --rdl ${RDL} \
             ${EXTRA_FLAGS}
 
-pkill -u $USER flux
-pkill -fu $USER initial_program
+pkill -u $USER flux-broker
