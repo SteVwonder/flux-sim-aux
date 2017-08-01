@@ -10,7 +10,6 @@ import subprocess
 import socket
 import syslog
 
-# import psutil
 import flux
 from flux import core, kvs, jsc
 from flux.core.inner import ffi
@@ -85,8 +84,6 @@ def print_flux_info():
     output = subprocess.check_output(cmd)
     if len(output) > 0:
         print "Flux module info: {}".format(output)
-    # p = psutil.Process()
-    # print "Flux broker CPU affinity: {}".format(p.cpu_affinity())
 
 def get_lwj_dir(fh, job_id):
     payload_str = json.dumps({'ids': [job_id]})
