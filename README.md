@@ -31,10 +31,44 @@ Running the Simulation
 * You can view the output from the Flux brokers and the `inital_program` in `./logs`
 * You can view the simulation results (job starttimes, completetimes, etc) in `./results`
 
+Simulation Results Format
+=========================
+
+If you use the `initial_program` python script included in this
+repository, a csv will be generate with the results of the simulation.
+The csv will contain the following columns:
+
+* id
+  * Integer
+  * ID of the job.  This id is given by the simulation (it is
+    necessarily the same id as in the input job trace)
+* nnodes
+  * Integer
+  * number of nodes requested by the job
+* ntasks
+  * Integer
+  * number of cpus requested by the job
+* walltime
+  * Integer
+  * number of seconds requested by the job
+* submit_time
+  * Double
+  * simulation time (in seconds) when the job was submitted
+* starting_time
+  * Double
+  * simulation time (in seconds) when the job started
+* execution_time
+  * Double
+  * length of simulation time (in seconds) that the job ran for
+* completion_time
+  * Double
+  * simulation time (in seconds) when the job finished executing
+
 Job Trace Format
 ================
 
-* 5 Required Fields
+* A csv file with a header row and an additional row for each job
+* 5 Required Columns
   * NNodes
     * Integer
     * number of nodes requested by the job
@@ -52,7 +86,7 @@ Job Trace Format
     * string with the format "hours:minutes:seconds", (e.g. "01:15:45"
       is 1 hour, 15 minutes, 45 seconds)
     * time that the job actually ran for (should be <= Timelimit)
-* Optional Fields
+* Optional Columns
   * JobID
     * Integer
     * The simulation will use it's own ID, but it will print out the

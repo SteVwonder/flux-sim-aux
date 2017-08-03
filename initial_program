@@ -96,8 +96,8 @@ pending_jobs = []
 running_jobs = []
 completed_jobs = []
 def get_jsc_cb(outstream):
-    fieldnames = ['id', 'nnodes', 'ntasks', 'starting_time', 'complete_time',
-                  'walltime', 'submit_time', 'execution_time']
+    fieldnames = ['id', 'nnodes', 'ntasks', 'walltime', 'submit_time',
+                  'starting_time', 'execution_time', 'complete_time']
     writer = csv.DictWriter(outstream, fieldnames)
     writer.writeheader()
     def jsc_cb(jcb_str, arg, errnum):
@@ -189,8 +189,7 @@ def main():
     print "Argv: ", sys.argv
     parser = argparse.ArgumentParser()
     parser.add_argument('job_trace')
-    parser.add_argument('--results', '-o',
-                        help="directory to store the results in")
+    parser.add_argument('results_dir', help="directory to store the results in")
     parser.add_argument('--sched_plugin', help="which sched plugin to use")
     parser.add_argument('--log_dir', help="log stdout to a file (arg = directory)")
     parser.add_argument('--rdl', help="path to the rdl file to pass to sched module")
@@ -198,15 +197,14 @@ def main():
     args = parser.parse_args()
 
     assert os.path.isfile(args.job_trace)
-    if args.results:
-        assert os.path.isdir(args.results)
+    assert os.path.isdir(args.results_dir)
 
     flux_handle = flux.Flux()
     setup_logging(args, flux_handle)
     print_flux_info()
 
     print "Registering callback with JSC"
-    outfilename = os.path.join(args.results, "jobs.csv")
+    outfilename = os.path.join(args.results_dir, "jobs.csv")
     with open(outfilename, 'wb', 0) as outfile:
         jsc.notify_status(flux_handle, get_jsc_cb(outfile), flux_handle)
         load_modules(args)

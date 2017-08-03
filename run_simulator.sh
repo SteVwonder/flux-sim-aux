@@ -119,7 +119,7 @@ ${FLUX_CMD} start \
             -o,-Spersist-filesystem=${PERSIST_DIR} \
             ./initial_program \
             ./job_traces/${JOB_NAME}/job_trace.csv \
-            --results ${RESULTS_DIR} \
+            ${RESULTS_DIR} \
             --sched_plugin ${SCHED_PLUGIN} \
             --log_dir ${LOG_DIR} \
             --rdl ${RDL} \
