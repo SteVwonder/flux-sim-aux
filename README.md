@@ -3,7 +3,7 @@ Setup
 
 * Clone these specific versions off GitHub:
   * [flux-framework/flux-core:3bd59f3198f1beb36c6a79bcea39009b328fb697](https://github.com/flux-framework/flux-core/commit/3bd59f3198f1beb36c6a79bcea39009b328fb697)
-  * [stevwonder/flux-sched:272274069b4a003b4e49aae1e63169cba74ae0c9](https://github.com/stevwonder/flux-sched/commit/272274069b4a003b4e49aae1e63169cba74ae0c9)
+  * [stevwonder/flux-sched:3f575bc98c84bca3afd857d7ce3ac98a62969597](https://github.com/stevwonder/flux-sched/commit/3f575bc98c84bca3afd857d7ce3ac98a62969597)
 * Clone the [scheduling auxillary repo](https://lc.llnl.gov/bitbucket/projects/FLUX/repos/sim-aux) (i.e., this repo) from LLNL's BitBucket
   * NOTE: all 3 of these repositories should exist in the same directory, e.g.:
     * flux-framework
@@ -105,3 +105,14 @@ Job Trace Format
     * Integer
     * IO rate of the job, per node.  Used in simulations of the
       io-aware scheduler.
+
+Notes and Todos
+===============
+* When running the simulator it must be the case that there is always at least 1 job running (or submitted?) otherwise Flux will exit. This appears to happen because of the following code in `initial_program`:
+```
+if len(completed_jobs) > 0 and len(running_jobs) == 0 and len(pending_jobs) == 0:
+    print "All children are dead, exiting"
+    fh.reactor_stop(fh.get_reactor())
+```
+* Logging level is DEBUG and we may want to change that in an option
+
