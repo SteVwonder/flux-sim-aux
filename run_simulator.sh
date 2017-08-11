@@ -17,6 +17,7 @@ CLUSTER_CONF_DIR="./conf"
 JOB_NAME="hype"
 EXTRA_FLAGS=""
 SCHED_PLUGIN="sched.fcfs"
+NUM_JOBS="-1"
 
 # Use -gt 1 to consume two arguments per pass in the loop (e.g. each
 # argument has a corresponding value to go with it).
@@ -56,6 +57,10 @@ do
             EXTRA_FLAGS="--redirect_script ${SCRIPT_PATH}"${EXTRA_FLAGS:+" $EXTRA_FLAGS"}
             shift # past argument
             ;;
+		--num_jobs|-n)
+			NUM_JOBS="$2"
+			shift
+			;;
         -h|--help)
             echo 'Options:
     --strace
@@ -64,6 +69,7 @@ do
     -j|--job
     -r|--rdl
     -p|--plugin
+	-n|--num_jobs
     --redirect'
             exit 0
             ;;
@@ -77,6 +83,7 @@ echo FLUX CMD     = "${FLUX_CMD}"
 echo JOB NAME     = "${JOB_NAME}"
 echo SCHED_PLUGIN = "${SCHED_PLUGIN}"
 echo EXTRA FLAGS  = "${EXTRA_FLAGS}"
+echo NUM JOBS     = "${NUM_JOBS}"
 
 if [[ -n $RDL ]]; then
     true # do nothing
@@ -123,6 +130,7 @@ ${FLUX_CMD} start \
             --sched_plugin ${SCHED_PLUGIN} \
             --log_dir ${LOG_DIR} \
             --rdl ${RDL} \
+            --num_jobs ${NUM_JOBS} \
             ${EXTRA_FLAGS}
 
 pkill -u $USER flux-broker

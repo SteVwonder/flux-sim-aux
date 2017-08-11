@@ -95,7 +95,7 @@ def get_lwj_dir(fh, job_id):
 pending_jobs = []
 running_jobs = []
 completed_jobs = []
-def get_jsc_cb(outstream):
+def get_jsc_cb(outstream, num_jobs):
     fieldnames = ['id', 'nnodes', 'ntasks', 'walltime', 'submit_time',
                   'starting_time', 'execution_time', 'complete_time']
     writer = csv.DictWriter(outstream, fieldnames)
@@ -131,7 +131,7 @@ def get_jsc_cb(outstream):
                     pass
             rowdict['id'] = jobid
             writer.writerow(rowdict)
-        if len(completed_jobs) > 0 and len(running_jobs) == 0 and len(pending_jobs) == 0:
+        if len(completed_jobs) >= num_jobs and len(running_jobs) == 0 and len(pending_jobs) == 0:
             print "All children are dead, exiting"
             fh.reactor_stop(fh.get_reactor())
     return jsc_cb
@@ -194,9 +194,17 @@ def main():
     parser.add_argument('--log_dir', help="log stdout to a file (arg = directory)")
     parser.add_argument('--rdl', help="path to the rdl file to pass to sched module")
     parser.add_argument('--verbose', '-v', action='count')
+    parser.add_argument('--num_jobs', type=int, help="Max. number of jobs to wait for. -1 means all jobs")
     args = parser.parse_args()
 
     assert os.path.isfile(args.job_trace)
+    if not args.num_jobs or args.num_jobs < 0:
+        with open(args.job_trace) as infile:
+            num_lines = len(infile.readlines())
+            num_jobs = num_lines - 1
+    else:
+        num_jobs = args.num_jobs
+
     assert os.path.isdir(args.results_dir)
 
     flux_handle = flux.Flux()
@@ -206,7 +214,7 @@ def main():
     print "Registering callback with JSC"
     outfilename = os.path.join(args.results_dir, "jobs.csv")
     with open(outfilename, 'wb', 0) as outfile:
-        jsc.notify_status(flux_handle, get_jsc_cb(outfile), flux_handle)
+        jsc.notify_status(flux_handle, get_jsc_cb(outfile, num_jobs), flux_handle)
         load_modules(args)
         event_reactor_proc(flux_handle)
 
