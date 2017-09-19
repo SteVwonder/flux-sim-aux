@@ -30,11 +30,12 @@ def load_sched_module(args):
     if len(output) > 0:
         print output
 
-def load_submit_module(args):
+def load_submit_module(args, num_jobs):
     ''' Load the sched module into the enclosing flux instance '''
 
     load_cmd = ['flux', 'module', 'load', 'submit',
-                'job-csv={}'.format(args.job_trace)]
+                'job-csv={}'.format(args.job_trace),
+                'num-jobs={}'.format(num_jobs)]
 
     print "Loading submit module: {}".format(load_cmd)
     output = subprocess.check_output(load_cmd)
@@ -60,11 +61,11 @@ def load_sim_module():
     if len(output) > 0:
         print output
 
-def load_modules(args):
+def load_modules(args, num_jobs):
     ''' Loads all of the necessary modules into the enclosing flux instance '''
 
     load_sim_module()
-    load_submit_module(args)
+    load_submit_module(args, num_jobs)
     load_exec_module()
     load_sched_module(args)
 
@@ -222,7 +223,7 @@ def main():
         jsc.notify_status(flux_handle,
                     get_jsc_cb(outfile, num_jobs, user_specified),
                     flux_handle)
-        load_modules(args)
+        load_modules(args, num_jobs)
         event_reactor_proc(flux_handle)
 
 if __name__ == "__main__":
