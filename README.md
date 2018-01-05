@@ -2,21 +2,23 @@ Setup
 =====
 
 * Clone these specific versions off GitHub:
-  * [flux-framework/flux-core:3bd59f3198f1beb36c6a79bcea39009b328fb697](https://github.com/flux-framework/flux-core/commit/3bd59f3198f1beb36c6a79bcea39009b328fb697)
-  * [stevwonder/flux-sched:3f575bc98c84bca3afd857d7ce3ac98a62969597](https://github.com/stevwonder/flux-sched/commit/3f575bc98c84bca3afd857d7ce3ac98a62969597)
-* Clone the [scheduling auxillary repo](https://lc.llnl.gov/bitbucket/projects/FLUX/repos/sim-aux) (i.e., this repo) from LLNL's BitBucket
+  * https://github.com/SteVwonder/flux-core/tree/sim-hackathon
+    * `git clone -b sim-hackathon https://github.com/SteVwonder/flux-core.git`
+  * https://github.com/SteVwonder/flux-sched/tree/sim-hackathon
+    * `git clone -b sim-hackathon https://github.com/SteVwonder/flux-sched.git`
+* Clone the [flux simulation auxillary repo](https://github.com/SteVwonder/flux-sim-aux) (i.e., this repo) from LLNL's BitBucket
   * NOTE: all 3 of these repositories should exist in the same directory, e.g.:
     * flux-framework
       * flux-core
       * flux-sched
-      * sched-aux
-  * If you want a different structure, you will have to edit the scripts in `sched-aux`
+      * flux-sim-aux
+  * If you want a different structure, you will have to edit the scripts in `flux-sim-aux`
 * configure and compile `flux-core` and `flux-sched`
 
 Running the Simulation
 ======================
 
-* Change directories to the `sched-aux` repo
+* Change directories to the `flux-sim-aux` repo
 * Execute the `run_simulator.sh` script
   * By default, this script launches a simulation with:
     * a FCFS scheduler in each instance
@@ -108,11 +110,6 @@ Job Trace Format
 
 Notes and Todos
 ===============
-* When running the simulator it must be the case that there is always at least 1 job running (or submitted?) otherwise Flux will exit. This appears to happen because of the following code in `initial_program`:
-```
-if len(completed_jobs) > 0 and len(running_jobs) == 0 and len(pending_jobs) == 0:
-    print "All children are dead, exiting"
-    fh.reactor_stop(fh.get_reactor())
-```
-* Logging level is DEBUG and we may want to change that in an option
+* Logging level is DEBUG by default
+  - TODO: Need to add switch the default to INFO and add a `--debug` flag
 
