@@ -27,6 +27,8 @@ Running the Simulation
   * You can change these settings by passing `--job`, `--rdl`, and `--plugin` to the run script
     * The argument to `--job` should correspond to a directory in `job_traces`
       * e.g. `./run_simulator.sh --job cab`
+    * If you want to choose a different location of the job traces (in csv format), you can specify `--trace`
+    * You can specify a particular number of jobs via `--num_jobs`. -1 is the default and means run all the jobs in the trace.
     * The script will attempt to infer what RDL to use based on the name of the job workload you pass in
       * e.g. if `cab` is in the name of the job workload it will use the `cab.lua` configuration
     * Usually, I only pass `--plugin` to change the scheduler plugin and `--job` to change the job workload
