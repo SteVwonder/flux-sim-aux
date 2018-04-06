@@ -24,6 +24,8 @@ def load_sched_module(args):
         load_cmd.append("rdl-conf={}".format(args.rdl))
     if args.verbose:
         load_cmd.append("verbosity={}".format(args.verbose))
+    if args.plugin_opts:
+        load_cmd.append("plugin-opts={}".format(args.plugin_opts))
 
     print "Loading sched module: {}".format(load_cmd)
     output = subprocess.check_output(load_cmd)
@@ -198,6 +200,7 @@ def main():
     parser.add_argument('--rdl', help="path to the rdl file to pass to sched module")
     parser.add_argument('--verbose', '-v', action='count')
     parser.add_argument('--num_jobs', type=int, help="Max. number of jobs to wait for. -1 means all jobs")
+    parser.add_argument('--plugin_opts', help="passed into flux-sched plugin")
     args = parser.parse_args()
 
     assert os.path.isfile(args.job_trace)

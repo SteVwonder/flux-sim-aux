@@ -43,6 +43,10 @@ do
             JOB_NAME="$2"
             shift # past argument
             ;;
+        -t|--trace)
+            TRACE_FILE="$2"
+            shift
+            ;;
         -r|--rdl)
             RDL="$2"
             shift # past argument
@@ -57,19 +61,20 @@ do
             EXTRA_FLAGS="--redirect_script ${SCRIPT_PATH}"${EXTRA_FLAGS:+" $EXTRA_FLAGS"}
             shift # past argument
             ;;
-		--num_jobs|-n)
-			NUM_JOBS="$2"
-			shift
-			;;
+        --num_jobs|-n)
+            NUM_JOBS="$2"
+            shift
+            ;;
         -h|--help)
             echo 'Options:
     --strace
     -g|--gdb
     -x|--xterm
     -j|--job
+    -t|--trace
     -r|--rdl
     -p|--plugin
-	-n|--num_jobs
+    -n|--num_jobs
     --redirect'
             exit 0
             ;;
@@ -81,6 +86,7 @@ do
 done
 echo FLUX CMD     = "${FLUX_CMD}"
 echo JOB NAME     = "${JOB_NAME}"
+echo TRACE_FILE   = "${TRACE_FILE}"
 echo SCHED_PLUGIN = "${SCHED_PLUGIN}"
 echo EXTRA FLAGS  = "${EXTRA_FLAGS}"
 echo NUM JOBS     = "${NUM_JOBS}"
@@ -102,6 +108,9 @@ else
     exit 1
 fi
 
+if [ -z "$TRACE_FILE" ]; then
+    TRACE_FILE=./job_traces/${JOB_NAME}/job_trace.csv
+fi
 RESULTS_DIR=./results/${JOB_NAME}
 LOG_DIR=./logs/${JOB_NAME}
 PERSIST_DIR=./persist/${JOB_NAME}
@@ -122,10 +131,11 @@ fi
 ulimit -c unlimited
 ulimit -f unlimited
 
+# srun -N 1
 ${FLUX_CMD} start \
             -o,-Spersist-filesystem=${PERSIST_DIR} \
             ./initial_program \
-            ./job_traces/${JOB_NAME}/job_trace.csv \
+            ${TRACE_FILE} \
             ${RESULTS_DIR} \
             --sched_plugin ${SCHED_PLUGIN} \
             --log_dir ${LOG_DIR} \
