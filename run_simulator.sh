@@ -6,10 +6,6 @@ export FLUX_SCHED_RC_NOOP=1
 # already. These assume that flux-core, flux-sched, and this aux repo
 # are all sibling directories
 #
-# module load python/2.7
-# module load python-cffi/1.1.2
-# module load python-pycparser/2.10
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$HOME/local2/lib/pkgconfig"
 export FLUX_MODULE_PATH=$(readlink -f ../flux-sched/simulator/.libs)${FLUX_MODULE_PATH:+":$FLUX_MODULE_PATH"}
 #export LUA_PATH="$(readlink -f ../flux-sched/rdl)/?.lua"
 #export LUA_CPATH="$(readlink -f ../flux-sched/rdl)/?.so"
